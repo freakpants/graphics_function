@@ -3,13 +3,20 @@ const scrapeWebsite = require('./pptr');
 
 exports.scrape = functions
   .runWith({
-    timeoutSeconds: 120,
-    memory: '2GB',
+    timeoutSeconds: 240,
+    memory: '4GB',
   })
   .region('us-central1')
-  .https.onRequest(async (req, res) => {
-    const url = req.query.url;
-    const buffer = await scrapeWebsite(url);
+  .https.onCall(async (data, context) => {
+
+    if (context.app == undefined) {
+      throw new functions.https.HttpsError(
+          'failed-precondition',
+          'The function must be called from an App Check verified app.')
+    }
+
+
+    const buffer = await scrapeWebsite(data);
     
-    res.type('image/png').send(buffer);
+    return buffer;
   });

@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 
-const scrapeWebsite = async (url) => {
-  let buffer = {};
+const scrapeWebsite = async (data) => {
+  let base64 = {};
   const browser = await puppeteer.launch({
     args: [
       '--no-sandbox',
@@ -18,11 +18,31 @@ const scrapeWebsite = async (url) => {
       'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36'
     );
 
+
+    const background = data.background;
+    let url = `https://freakpants.ch/fut/php/export_ratings.php?background=${background}`;
+
+    if(data.title !== "") {
+      url += `&title=${data.title}`;
+    }
+    if(data.emphasis !== "") {
+      url += `&emphasis=${data.emphasis}`;
+    }
+    if(data.rarity !== "") {
+      url += `&rarity=${data.rarity}`;
+    }
+    if(data.limit !== "") {
+      url += `&limit=${data.limit}`;
+    }
+    if(data.prices !== "") {
+      url += '&prices=1';
+    }
+
     await page.goto(url, {
-      waitUntil: 'domcontentloaded',
+      waitUntil: 'networkidle2',
     });
 
-    buffer = await page.screenshot({fullPage: true});
+    base64 = await page.screenshot({fullPage: true, encoding: 'base64', type: 'jpeg', quality: 95});
 
 
   } catch (error) {
@@ -32,7 +52,7 @@ const scrapeWebsite = async (url) => {
       await browser.close();
     }
   }
-  return buffer;
+  return base64;
 };
 
 module.exports = scrapeWebsite;
