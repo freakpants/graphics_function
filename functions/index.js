@@ -3,8 +3,8 @@ const scrapeWebsite = require('./pptr');
 
 exports.scrape = functions
   .runWith({
-    timeoutSeconds: 240,
-    memory: '4GB',
+    timeoutSeconds: 540,
+    memory: '8GB',
   })
   .region('us-central1')
   .https.onCall(async (data, context) => {
