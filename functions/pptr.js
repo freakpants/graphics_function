@@ -80,7 +80,8 @@ const scrapeWebsite = async (data) => {
       waitUntil: 'networkidle2',
     });
 
-    base64 = await page.screenshot({fullPage: true, encoding: 'base64', type: 'png'});
+    // DO NOT USE PNG, AS IT WILL GENERATE IMAGES THAT ARE BIGGER THAN 10MB, which is the limit for HTTP REQUESTS
+    base64 = await page.screenshot({fullPage: true, encoding: 'base64', type: 'jpeg', quality: 100});
 
 
   } catch (error) {
