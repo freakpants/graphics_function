@@ -74,6 +74,18 @@ const scrapeWebsite = async (data) => {
       url += '&insta=1';
     }
 
+    if(data.country !== ""){
+      url += `&country=${data.country}`;
+    }
+
+    /* if(data.user !== ""){
+      switch(data.user){
+        case 'nKSE25c8ekV3zLqZgtaIfsMBxTk1':
+          url += '&creator=besoccer';
+        break;
+      }
+    } */
+
     console.log(url);
 
     await page.goto(url, {
